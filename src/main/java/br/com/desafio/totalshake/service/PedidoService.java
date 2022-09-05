@@ -1,26 +1,26 @@
 package br.com.desafio.totalshake.service;
 
-import br.com.desafio.totalshake.model.Pedido;
-import br.com.desafio.totalshake.model.Status;
-import br.com.desafio.totalshake.repositorio.PedidoRepo;
+import br.com.desafio.totalshake.dto.PedidoDTO;
+import br.com.desafio.totalshake.repository.PedidoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PedidoService {
 
-    private final PedidoRepo pedidoRepo;
-
-    public PedidoService(PedidoRepo pedidoRepo) {
-        this.pedidoRepo = pedidoRepo;
+    @Autowired
+    public PedidoRepository pedidoRepository;
+    public List<PedidoDTO> findallPedidos() {
+        return pedidoRepository.findAll()
+                .stream()
+                .map(PedidoDTO::convertToDTO)
+                .toList();
     }
 
-    @Transactional
-    public Pedido salvarPedido(Pedido pedido) {
-        return pedidoRepo.save(pedido);
+    public PedidoDTO findPedidoById(Long id) {
+        var pedido = pedidoRepository.findById(id).orElseThrow(RuntimeException::new);
+        return PedidoDTO.convertToDTO(pedido);
     }
 }

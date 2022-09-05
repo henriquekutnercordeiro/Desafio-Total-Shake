@@ -1,84 +1,31 @@
 package br.com.desafio.totalshake.model;
 
-import br.com.desafio.totalshake.repositorio.PedidoRepo;
-import br.com.desafio.totalshake.service.PedidoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.desafio.totalshake.enums.Status;
+import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
-@Table(name = "pedido")
+@Data
 public class Pedido {
-
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private LocalDateTime dataHora;
 
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-    private List<ItemPedido> itensPedido;
-
-    public void setItensPedido(List<ItemPedido> itensPedido) {
-        this.itensPedido = itensPedido;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getDataHora() {
-        return dataHora;
-    }
-
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public List<ItemPedido> getItensPedido() {
-        return itensPedido;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pedido pedido = (Pedido) o;
-        return Objects.equals(id, pedido.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", dataHora=" + dataHora +
-                ", status=" + status +
-                ", itensPedido=" + itensPedido +
-                '}';
-    }
+    @NotNull(message = "Missing 'pedido'")
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "pedido",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<ItemPedido> itensPedidoList;
 }

@@ -1,4 +1,4 @@
-package br.com.desafio.totalshake.model;
+package br.com.desafio.totalshake.enums;
 
 public enum Status {
     REALIZADO,
@@ -8,5 +8,5 @@ public enum Status {
     CONFIRMADO,
     PRONTO,
     SAIU_PARA_ENTREGA,
-    ENTREGUE,
+    ENTREGUE
 }
